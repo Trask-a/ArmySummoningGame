@@ -74,7 +74,7 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 200}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
-  controlID: 147
+  controlID: 83
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -250,7 +250,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 1
-  controlID: 148
+  controlID: 84
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -276,7 +276,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 8096}
   vertical: 0
-  controlID: 149
+  controlID: 85
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -412,14 +412,14 @@ MonoBehaviour:
   m_LastFolders:
   - Assets/Prefabs
   m_LastFoldersGridSize: -1
-  m_LastProjectPath: F:\UnityHub\Army Summoning Game
+  m_LastProjectPath: F:\UnityHub\ArmySummoningGameGitRepo\ArmySummoningGame
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 4}
-    m_SelectedIDs: 7ea00000
-    m_LastClickedID: 41086
-    m_ExpandedIDs: 00000000e49f000082a0000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 68}
+    m_SelectedIDs: b45e0000
+    m_LastClickedID: 24244
+    m_ExpandedIDs: 00000000e25c0000845e0000ae5e0000ca5e000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -447,7 +447,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000
+    m_ExpandedIDs: 00000000e25c0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -472,8 +472,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 28c00000
-    m_LastClickedInstanceID: 49192
+    m_SelectedInstanceIDs: 84f0ffff
+    m_LastClickedInstanceID: -3964
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
@@ -579,7 +579,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 82b2feff42b6feff22effeffe0effeff00f0feffb2f2feff70f3feff26f5feff8004ffff3c05fffff206ffff4e32ffff0a33ffffc034ffff40c8ffff
+      m_ExpandedIDs: 4af0ffff74f0ffff7ef0ffff2ef8ffff24fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -829,9 +829,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 11.014081, y: 1.8591676, z: 2.0811996}
+    m_Target: {x: 2.4007826, y: 1.0833335, z: -16.302874}
     speed: 2
-    m_Value: {x: 11.014081, y: 1.8591676, z: 2.0811996}
+    m_Value: {x: 2.4007826, y: 1.0833335, z: -16.302874}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -878,13 +878,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.075312585, y: 0.8989474, z: -0.17084387, w: -0.39627853}
+    m_Target: {x: 0.060052488, y: 0.08523515, z: -0.0051480513, w: 0.9945401}
     speed: 2
-    m_Value: {x: -0.07531249, y: 0.8989462, z: -0.17084365, w: -0.39627802}
+    m_Value: {x: 0.060052253, y: 0.08523481, z: -0.0051480313, w: 0.99453616}
   m_Size:
-    m_Target: 10.458992
+    m_Target: 1.2247449
     speed: 2
-    m_Value: 10.458992
+    m_Value: 1.2247449
   m_Ortho:
     m_Target: 0
     speed: 2
