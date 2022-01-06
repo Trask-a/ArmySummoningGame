@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61274ae7ae4ad1945b04ecad4a49a0f3, type: 3}
+  m_Name: Ring of Haste
+  m_EditorClassIdentifier: 
+  name: Ring of Haste
+  icon: {fileID: 21300000, guid: 1484a0eb4b2595c458dfe1c88bdce782, type: 3}
+  rarity: 0
+  description: 
+  healthModifier: 0
+  damageModifier: 0
+  attackSpeedModifier: 0.2
+  equipmentSlot: 4
