@@ -71,7 +71,8 @@ public class PasswordNetworkManager : NetworkBehaviour
         {
             passwordEntryUI.SetActive(false);
             leaveButton.SetActive(true);
-            cam.GetComponent<followPlayer>().findPlayer();
+            //cam.GetComponent<followPlayer>().findPlayer();
+            
         }
     }
 

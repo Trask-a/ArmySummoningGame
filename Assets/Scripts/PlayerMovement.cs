@@ -43,10 +43,17 @@ public class PlayerMovement : NetworkBehaviour
     public Text attackSpeedText;
 
     public GameObject allyInformation;
+    public GameObject cam;
 
     // Start is called before the first frame update
     void Start()
     {
+        if(IsClient && IsOwner)
+        {
+            followPlayer.Instance.FollowPlayer(transform);
+        }
+        
+
         forward = Camera.main.transform.forward;
         forward.y = 0;
         forward = Vector3.Normalize(forward);
@@ -230,13 +237,17 @@ public class PlayerMovement : NetworkBehaviour
     [ServerRpc]
     void ServerStopMoveServerRpc()
     {
+        if(!IsServer)
+        {
+            return;
+        }
         ClientStopMoveClientRpc();
     }
 
     [ClientRpc]
     void ClientStopMoveClientRpc()
     {
-        if (IsOwner) { return; }
+        //if (IsOwner) { return; }
         animController.SetBool("isRunning", false);
     }
 
