@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1671750599207969547}
   m_Layer: 0
   m_Name: Spawner
-  m_TagString: Untagged
+  m_TagString: Spawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 22.51, y: 10.78, z: 265.3143}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -47,3 +48,5 @@ MonoBehaviour:
   enemy: {fileID: 0}
   numberOfEnemies: 3
   enemiesAlive: []
+  respawnTimer: 4
+  serverStarted: 0

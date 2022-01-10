@@ -16,6 +16,7 @@ public class Spawner : NetworkBehaviour
     public List<GameObject> enemiesAlive = new List<GameObject>();
     public float respawnTimer = 4f;
     float respawnTime;
+    public bool serverStarted = false;
 
     private void Start()
     {
@@ -24,6 +25,10 @@ public class Spawner : NetworkBehaviour
 
     private void Update()
     {
+        if(serverStarted == false)
+        {
+            return;
+        }
         if(enemiesAlive.Count == 0)
         {
             respawnTime -= Time.deltaTime;

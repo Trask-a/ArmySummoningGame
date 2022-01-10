@@ -1047,6 +1047,7 @@ GameObject:
   - component: {fileID: 4429300914518786296}
   - component: {fileID: 4429300914518786299}
   - component: {fileID: 4566589988981628110}
+  - component: {fileID: -1095510022797692971}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1193,6 +1194,7 @@ MonoBehaviour:
   healthText: {fileID: 0}
   attackSpeedText: {fileID: 0}
   allyInformation: {fileID: 0}
+  cam: {fileID: 0}
 --- !u!195 &4429300914518786299
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1231,6 +1233,21 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &-1095510022797692971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3583000974891049103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Animator: {fileID: 4429300914518786302}
+  m_ParameterSendBits: 0
+  m_SendRate: 0.1
 --- !u!1 &3638074151826326484
 GameObject:
   m_ObjectHideFlags: 0

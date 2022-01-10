@@ -9,6 +9,9 @@ TagManager:
   - ShadowArmy
   - AllyButton
   - AllyInformation
+  - AllyPanel
+  - StatsPanel
+  - Spawner
   layers:
   - Default
   - TransparentFX

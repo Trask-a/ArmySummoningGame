@@ -62,6 +62,11 @@ public class PasswordNetworkManager : NetworkBehaviour
         if(NetworkManager.Singleton.IsHost)
         {
             HandleClientConnected(NetworkManager.Singleton.ServerClientId);
+            GameObject[] spawners = GameObject.FindGameObjectsWithTag("Spawner");
+            foreach (GameObject s in spawners)
+            {
+                s.GetComponent<Spawner>().serverStarted = true;
+            }
         }
     }
 

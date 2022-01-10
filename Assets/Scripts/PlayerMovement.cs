@@ -241,14 +241,14 @@ public class PlayerMovement : NetworkBehaviour
         {
             return;
         }
-        ClientStopMoveClientRpc();
+        ClientStopMove();
     }
 
-    [ClientRpc]
-    void ClientStopMoveClientRpc()
+    
+    void ClientStopMove()
     {
         //if (IsOwner) { return; }
-        animController.SetBool("isRunning", false);
+        animController.SetBool("isRunning", false); 
     }
 
     // TODO: Fix rotation so that it isn't at an angle

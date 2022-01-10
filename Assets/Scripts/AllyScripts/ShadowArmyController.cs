@@ -260,7 +260,7 @@ public class ShadowArmyController : NetworkBehaviour
         newAllyInfo.GetComponent<NetworkObject>().Spawn();
         AllyButtonClientRpc();
         //newAllyInfo.GetComponent<AllyButtonScript>().FindStatsPanel();
-        //newAllyInfo.GetComponent<AllyButtonScript>().ally = newAlly;
+        newAllyInfo.GetComponent<AllyButtonScript>().ally = newAlly;
         newAllyInfo.GetComponent<AllyButtonScript>().allyType.Value = type;
         newAlly.GetComponent<AllyController>().allyButton = newAllyInfo;
         ClientSpawnAllyClientRpc();
