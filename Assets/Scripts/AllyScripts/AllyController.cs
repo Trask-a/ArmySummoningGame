@@ -21,10 +21,19 @@ public class AllyController : NetworkBehaviour
     public GameObject levelUpText;
     public GameObject allyButton;
 
+    public UnitUIControler unitUi;
+
+    public string allyName;
+
+    public AggroEnum allyAggro = AggroEnum.idle;
+    
     private void Start()
     {
         levelUp();
-        health = maxHealth;
+        health.Value = maxHealth.Value;
+        unitUi.SetHealth(health.Value, maxHealth.Value);
+        
+        unitUi.SetAllyName(allyName);
     }
 
     public void AddExperience(int exp)
@@ -42,9 +51,15 @@ public class AllyController : NetworkBehaviour
     public void TakeDamage(float damage)
     {
         health.Value -= damage;
-
+        unitUi.SetHealth(health.Value, maxHealth.Value);
         if (health.Value <= 0)
         {
+            Destroy(allyButton);
+            GameObject statsPanel = GameObject.FindGameObjectWithTag("StatsPanel");
+            if (statsPanel != null)
+            {
+                statsPanel.SetActive(false);
+            }
             transform.tag = "Untagged";
             Destroy(GetComponent<NavMeshAgent>());
             Destroy(gameObject, 1f);
@@ -56,7 +71,8 @@ public class AllyController : NetworkBehaviour
     public void Heal(float amount)
     {
         health.Value += amount;
-        if(health.Value >= maxHealth.Value)
+        unitUi.SetHealth(health.Value, maxHealth.Value);
+        if (health.Value >= maxHealth.Value)
         {
             health.Value = maxHealth.Value;
         }
@@ -126,6 +142,11 @@ public class AllyController : NetworkBehaviour
     public int GetExpToLevel()
     {
         return experienceToLevelUp.Value;
+    }
+
+    public int GetCurrentExp()
+    {
+        return experience.Value;
     }
 
 }

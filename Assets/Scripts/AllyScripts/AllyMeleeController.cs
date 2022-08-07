@@ -26,7 +26,6 @@ public class AllyMeleeController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         //player = GameObject.FindGameObjectWithTag("Player");
         findPlayer();
-        
     }
 
     void Update()
@@ -36,6 +35,7 @@ public class AllyMeleeController : MonoBehaviour
             findPlayer();
         }
         float playerDistance = Vector3.Distance(player.transform.position, transform.position);
+        // Return to player if they are too far away
         if (playerDistance >= 10)
         {
             if (agent != null)
@@ -50,50 +50,53 @@ public class AllyMeleeController : MonoBehaviour
         }
         else
         {
-            // If not targeting an enemy then search for one that is in range.
-            if (enemy == null)
+            if (GetComponent<AllyController>().allyAggro == AggroEnum.aggro || GetComponent<AllyController>().allyAggro == AggroEnum.hitAggro)
             {
-                detectionRadius = 5;
-                foundEnemy = CheckDistance();
-                // If no enemy found then follow player at a farther away position
-                if (foundEnemy == false)
+                // If not targeting an enemy then search for one that is in range.
+                if (enemy == null)
                 {
+                    detectionRadius = 5;
+                    foundEnemy = CheckDistance();
+                    // If no enemy found then follow player at a farther away position
+                    if (foundEnemy == false)
+                    {
+                        if (agent != null)
+                        {
+                            agent.SetDestination(player.transform.position);
+                            agent.stoppingDistance = 5;
+                        }
+                    }
+                }
+
+                // If player in detection radius then move towards player
+                if (enemy != null)
+                {
+                    float enemyDistance = Vector3.Distance(enemy.transform.position, transform.position);
                     if (agent != null)
                     {
-                        agent.SetDestination(player.transform.position);
-                        agent.stoppingDistance = 5;
+                        if (agent.pathStatus != NavMeshPathStatus.PathInvalid)
+                        {
+                            agent.SetDestination(enemy.transform.position);
+                        }
+                        agent.stoppingDistance = 3;
+                        detectionRadius = 100;
+
+                        // If Ally close to enemy then attack and face enemy
+                        if (enemyDistance <= agent.stoppingDistance)
+                        {
+                            attackCooldown -= Time.deltaTime;
+                            Attack(GetComponent<AllyController>().attack.Value);
+                            FacePlayer();
+                        }
                     }
+
+
                 }
-            }
-
-            // If player in detection radius then move towards player
-            if (enemy != null)
-            {
-                float enemyDistance = Vector3.Distance(enemy.transform.position, transform.position);
-                if (agent != null)
-                {
-                    if (agent.pathStatus != NavMeshPathStatus.PathInvalid)
-                    {
-                        agent.SetDestination(enemy.transform.position);
-                    }
-                    agent.stoppingDistance = 3;
-                    detectionRadius = 100;
-
-                    // If player close to enemy then attack and face player
-                    if (enemyDistance <= agent.stoppingDistance)
-                    {
-                        attackCooldown -= Time.deltaTime;
-                        Attack(GetComponent<AllyController>().attack.Value);
-                        FacePlayer();
-                    }
-                }
-
-
             }
         }
     }
 
-    // Rotates enemy towards target
+    // Rotates ally towards target
     void FacePlayer()
     {
         Vector3 direction = (enemy.transform.position - transform.position).normalized;
@@ -111,9 +114,13 @@ public class AllyMeleeController : MonoBehaviour
             if(enemy.GetComponent<EnemyController>().getHealth() - damage <= 0)
             {
                 GetComponent<AllyController>().AddExperience(enemy.GetComponent<EnemyController>().expWorth);
-                player.GetComponent<PlayerMovement>().AddExperience(enemy.GetComponent<EnemyController>().expWorth/2);
+                player.GetComponent<PlayerMovementControler>().AddExperience(enemy.GetComponent<EnemyController>().expWorth/2);
+                if(GetComponent<AllyController>().allyAggro == AggroEnum.hitAggro)
+                {
+                    GetComponent<AllyController>().allyAggro = AggroEnum.idle;
+                }
             }
-            enemy.GetComponent<EnemyController>().TakeDamage(damage);
+            enemy.GetComponent<EnemyController>().TakeDamage(damage, this.gameObject);
             GameObject dn = Instantiate(damageNumber, enemy.transform.position, new Quaternion(45, 45, 0, 1));
             dn.GetComponent<DamagePopup>().Setup((int)damage);
             // reset attack cooldown - the greater the attack speed the lower the cooldown
@@ -168,6 +175,20 @@ public class AllyMeleeController : MonoBehaviour
 
     public void findPlayer()
     {
+        player = GameObject.FindGameObjectWithTag("Player");
+        // Uncomment for multiplayer and recomment above line
+        /*GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject p in players)
+        {
+            if (p.GetComponent<NetworkObject>().IsLocalPlayer)
+            {
+                player = p;
+            }
+        }
+        */
+
+
+        /*
         ulong localClientId = 0;
         localClientId = NetworkManager.Singleton.LocalClientId;
 
@@ -188,6 +209,6 @@ public class AllyMeleeController : MonoBehaviour
 
             }
         }
-
+        */
     }
 }

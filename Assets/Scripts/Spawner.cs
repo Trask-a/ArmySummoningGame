@@ -25,10 +25,11 @@ public class Spawner : NetworkBehaviour
 
     private void Update()
     {
-        if(serverStarted == false)
-        {
-            return;
-        }
+        // Uncomment for multiplayer
+        //if(serverStarted == false)
+        //{
+         //   return;
+        //}
         if(enemiesAlive.Count == 0)
         {
             respawnTime -= Time.deltaTime;
@@ -54,7 +55,8 @@ public class Spawner : NetworkBehaviour
             
             GameObject e = Instantiate(enemy, spawnPos, transform.rotation);
             e.GetComponent<EnemyController>().spawner = gameObject;
-            e.GetComponent<NetworkObject>().Spawn();
+           //Un comment for multiplayer
+            // e.GetComponent<NetworkObject>().Spawn();
             enemiesAlive.Add(e);
         }
     }

@@ -26,25 +26,65 @@ public class EnemyController : NetworkBehaviour
 
     GameObject s = null;
 
+    public UnitUIControler unitUI;
+
+    public Dictionary<GameObject, float> damageTaken = new Dictionary<GameObject, float>();
+
+    // Is this enemy aggroed by a tank
+    bool isTankAggroed = false;
+
     private void Start()
     {
-        if(!IsHost)
-        {
-            return;
-        }
+        // Uncomment for multiplayer
+       // if(!IsHost)
+        //{
+          //  return;
+        //}
         levelUp();
         health.Value = maxHealth;
+        unitUI.SetHealth(health.Value, maxHealth);
+        unitUI.SetAllyName("NON BEAK Gamer " + Random.Range(1, 1000).ToString());
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, GameObject enemy)
     {
         health.Value -= damage;
+        unitUI.SetHealth(health.Value, maxHealth);
+        // Keep track of total damage from all enemies
+        if(damageTaken.ContainsKey(enemy))
+        {
+            damageTaken[enemy] += damage;
+        }
+        else
+        {
+            damageTaken.Add(enemy, damage);
+        }
+
+        if (!isTankAggroed)
+        {
+            GameObject enemyToAggro = null;
+            float highestAmountOfDamage = 0;
+            foreach (KeyValuePair<GameObject, float> enemyDamage in damageTaken)
+            {
+                if (enemyDamage.Value > highestAmountOfDamage)
+                {
+                    highestAmountOfDamage = enemyDamage.Value;
+                    enemyToAggro = enemyDamage.Key;
+                }
+            }
+
+            if (TryGetComponent<EnemyMeleeController>(out EnemyMeleeController meleeControler))
+            {
+                meleeControler.enemy = enemyToAggro;
+            }
+        }
 
         if (health.Value <= 0 && dead == false)
         {
-            if (!IsOwner) { return; }
-            ServerDieServerRpc();
-            //Die();
+            // Uncomment for multiplayer and recomment out Die();
+            //if (!IsOwner) { return; }
+            //ServerDieServerRpc();
+            Die();
         }
     }
 
@@ -135,14 +175,16 @@ public class EnemyController : NetworkBehaviour
 
     void Die()
     {
-        if (!IsHost)
-        {
-            return;
-        }
+        // Uncomment for multiplayer
+        //if (!IsHost)
+        //{
+          //  return;
+        //}
         dead = true;
         //THIS LINE WE HAVE TO GET RID OF but also not sure how shit will work..... 
         s = Instantiate(soul, transform.position, transform.rotation);
-        s.GetComponent<NetworkObject>().Spawn();
+        //Uncomment for multiplayer
+        //s.GetComponent<NetworkObject>().Spawn();
         // I think i need to send all this data to the serverRpc....
         s.GetComponent<Soul>().attack.Value = attack;
         s.GetComponent<Soul>().attackSpeed.Value = attackSpeed;
@@ -195,5 +237,22 @@ public class EnemyController : NetworkBehaviour
     {
         Vector3 spawnPos = new Vector3(transform.position.x,(transform.position.y - transform.localScale.y / 2), transform.position.z);
         Instantiate(loot, spawnPos, transform.rotation);
+    }
+
+    public void TankAggroed(float aggroTime)
+    {
+        isTankAggroed = true;
+        StartCoroutine(Aggroed(aggroTime));
+    }
+
+    public IEnumerator Aggroed(float aggroTime)
+    {
+        float disAmount = 0;
+        while (disAmount <= aggroTime)
+        {
+            yield return new WaitForSeconds(0.1f);
+            disAmount += 0.1f;
+        }
+        isTankAggroed = false;
     }
 }

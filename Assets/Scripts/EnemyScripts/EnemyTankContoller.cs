@@ -138,7 +138,7 @@ public class EnemyTankContoller : MonoBehaviour
         {
             if (enemy.tag == "Player")
             {
-                enemy.GetComponent<PlayerMovement>().TakeDamage(damage);
+                enemy.GetComponent<PlayerMovementControler>().TakeDamage(damage);
             }
 
             if (enemy.tag == "Ally")

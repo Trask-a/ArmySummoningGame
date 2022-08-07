@@ -20,6 +20,8 @@ public class AllyTankController : MonoBehaviour
     float deathTimer = 1.5f;
     bool foundEnemy = false;
     public GameObject damageNumber;
+    // How long does the aggro last
+    float tankAggroTime = 3f;
 
     void Start()
     {
@@ -123,9 +125,9 @@ public class AllyTankController : MonoBehaviour
             if (enemy.GetComponent<EnemyController>().getHealth() - damage <= 0)
             {
                 GetComponent<AllyController>().AddExperience(enemy.GetComponent<EnemyController>().expWorth);
-                player.GetComponent<PlayerMovement>().AddExperience(enemy.GetComponent<EnemyController>().expWorth/2);
+                player.GetComponent<PlayerMovementControler>().AddExperience(enemy.GetComponent<EnemyController>().expWorth/2);
             }
-            enemy.GetComponent<EnemyController>().TakeDamage(damage);
+            enemy.GetComponent<EnemyController>().TakeDamage(damage, this.gameObject);
             GameObject dn = Instantiate(damageNumber, enemy.transform.position, new Quaternion(45, 45, 0, 1));
             dn.GetComponent<DamagePopup>().Setup((int)damage);
             // reset attack cooldown - the greater the attack speed the lower the cooldown
@@ -146,6 +148,8 @@ public class AllyTankController : MonoBehaviour
             {
                 enemy.GetComponent<EnemyRangedController>().enemy = transform.gameObject;
             }
+
+            enemy.GetComponent<EnemyController>().TankAggroed(tankAggroTime);
             GameObject dn = Instantiate(damageNumber, enemy.transform.position, new Quaternion(45, 45, 0, 1));
             dn.GetComponent<DamagePopup>().Setup("Aggro");
             GetComponent<AllyController>().AddExperience(1);

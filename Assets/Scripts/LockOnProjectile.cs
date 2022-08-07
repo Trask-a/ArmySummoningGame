@@ -19,7 +19,7 @@ public class LockOnProjectile : MonoBehaviour
     public GameObject EDN;
     // ally damage number
     public GameObject ADN;
-
+    public GameObject ownerOfProjectile;
     // Start is called before the first frame update
     void Start()
     { 
@@ -51,7 +51,7 @@ public class LockOnProjectile : MonoBehaviour
             {
                 if (other.tag == "Player")
                 {
-                    entity.GetComponent<PlayerMovement>().TakeDamage(damage);
+                    entity.GetComponent<PlayerMovementControler>().TakeDamage(damage);
                     GameObject dn = Instantiate(EDN, entity.transform.position, new Quaternion(45, 45, 0, 1));
                     dn.GetComponent<DamagePopup>().Setup((int)damage);
                     Destroy(gameObject);
@@ -71,7 +71,7 @@ public class LockOnProjectile : MonoBehaviour
             {
                 if (other.tag == "enemy")
                 {
-                    entity.GetComponent<EnemyController>().TakeDamage(damage);
+                    entity.GetComponent<EnemyController>().TakeDamage(damage, ownerOfProjectile);
                     GameObject dn = Instantiate(ADN, entity.transform.position, new Quaternion(45, 45, 0, 1));
                     dn.GetComponent<DamagePopup>().Setup((int)damage);
                     Destroy(gameObject);
@@ -80,11 +80,12 @@ public class LockOnProjectile : MonoBehaviour
         }
     }
 
-    public void Setup(GameObject e, float d)
+    public void Setup(GameObject e, float d, GameObject owner)
     {
         damage = d;
         entity = e;
         enemyLocation = entity.transform.position;
         enemyForward = entity.transform.forward;
+        ownerOfProjectile = owner;
     }
 }

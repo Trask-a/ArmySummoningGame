@@ -122,7 +122,7 @@ public class EnemyRangedController : MonoBehaviour
         {
             // Spawn Projectile
             GameObject proj = Instantiate(projectilePrefab, transform.position, transform.rotation);
-            proj.GetComponent<LockOnProjectile>().Setup(enemy, GetComponent<EnemyController>().attack);
+            proj.GetComponent<LockOnProjectile>().Setup(enemy, GetComponent<EnemyController>().attack, this.gameObject);
 
             // reset attack cooldown - the greater the attack speed the lower the cooldown
             attackCooldown = 1f / GetComponent<EnemyController>().attackSpeed;

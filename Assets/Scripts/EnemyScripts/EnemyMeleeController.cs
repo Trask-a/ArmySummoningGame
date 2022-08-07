@@ -26,7 +26,7 @@ public class EnemyMeleeController : NetworkBehaviour
     float idleTime = 3;
     AIState state = AIState.roam;
     enum AIState {idle, roam}
-
+    
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -35,11 +35,12 @@ public class EnemyMeleeController : NetworkBehaviour
 
     void Update()
     {
-        if (!IsOwner)
-        {
+        // Uncomment for multiplayer
+       // if (!IsOwner)
+        //{
 
-            return;
-        }
+          //  return;
+        //}
         // If not targeting an enemy then search for one that is in range.
         if (enemy == null)
         {
@@ -99,14 +100,13 @@ public class EnemyMeleeController : NetworkBehaviour
                 }
             }
 
-
         }
     }
 
-    // Rotates enemy towards target
+    // Rotates enemy towards target it is attacking
     void FacePlayer()
     {
-        Vector3 direction = (player.transform.position - transform.position).normalized;
+        Vector3 direction = (enemy.transform.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         // Rotation over time for smooth rotation
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * lookRotationSpeed);
@@ -121,12 +121,17 @@ public class EnemyMeleeController : NetworkBehaviour
 
             if (enemy.tag == "Player")
             { 
-                enemy.GetComponent<PlayerMovement>().TakeDamage(damage);
+                enemy.GetComponent<PlayerMovementControler>().TakeDamage(damage);
             }
 
             if (enemy.tag == "Ally")
             {
+                if (enemy.GetComponent<AllyController>().getHealth() - damage <= 0)
+                {
+                    GetComponent<EnemyController>().damageTaken.Clear();
+                }
                 enemy.GetComponent<AllyController>().TakeDamage(damage);
+                
             }
             GameObject dn = Instantiate(damageNumber, enemy.transform.position, new Quaternion(45, 45, 0, 1));
             dn.GetComponent<DamagePopup>().Setup((int)damage);
@@ -136,7 +141,7 @@ public class EnemyMeleeController : NetworkBehaviour
 
     }
 
-    bool CheckDistance()
+    public bool CheckDistance()
     {
         findPlayer();
         float enemyDistance = detectionRadius;
@@ -189,7 +194,10 @@ public class EnemyMeleeController : NetworkBehaviour
 
     public void findPlayer()
     {
-        ulong localClientId = 0;
+        player = GameObject.FindGameObjectWithTag("Player");
+        
+        // UnComment this block for multiplayer
+        /*ulong localClientId = 0;
         for(int i = 0; i < NetworkManager.ConnectedClientsList.Count; i++)
         {
             localClientId = NetworkManager.ConnectedClientsList[i].ClientId;
@@ -219,6 +227,9 @@ public class EnemyMeleeController : NetworkBehaviour
                 }
             }
         }
+        */
+
+        // Keep commented even for multiplayer, i think this was old non working code
         /*
         if(NetworkManager.ConnectedClients.Count == 0)
         {

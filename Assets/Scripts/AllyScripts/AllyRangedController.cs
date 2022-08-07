@@ -109,9 +109,9 @@ public class AllyRangedController : MonoBehaviour
             if (enemy.GetComponent<EnemyController>().getHealth() - GetComponent<AllyController>().attack.Value <= 0)
             {
                 GetComponent<AllyController>().AddExperience(enemy.GetComponent<EnemyController>().expWorth);
-                player.GetComponent<PlayerMovement>().AddExperience(enemy.GetComponent<EnemyController>().expWorth/2);
+                player.GetComponent<PlayerMovementControler>().AddExperience(enemy.GetComponent<EnemyController>().expWorth/2);
             }
-            proj.GetComponent<LockOnProjectile>().Setup(enemy, GetComponent<AllyController>().attack.Value);
+            proj.GetComponent<LockOnProjectile>().Setup(enemy, GetComponent<AllyController>().attack.Value, this.gameObject);
 
             // reset attack cooldown - the greater the attack speed the lower the cooldown
             attackCooldown = 1f / GetComponent<AllyController>().attackSpeed.Value;

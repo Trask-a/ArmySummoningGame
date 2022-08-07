@@ -13,7 +13,8 @@ public class ShadowArmyController : NetworkBehaviour
     public GameObject shadowArmy = null;
     public GameObject localPlayer;
     public GameObject newAlly;
-    private NetworkVariable<bool> armySummoned = new NetworkVariable<bool>(false);
+    //private NetworkVariable<bool> armySummoned = new NetworkVariable<bool>(false);
+    public bool armySummoned = false;
     public GameObject allyButton;
     public GameObject allyInformation;
     GameObject newAllyInfo;
@@ -25,7 +26,7 @@ public class ShadowArmyController : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    public void ServerSpawnAllyServerRpc(char type, float att, float attSpe, float h, int l, ulong localClientId)
+    public void ServerSpawnAllyServerRpc(char type, float att, float attSpe, float h, int l, ulong localClientId = 0)
     {
         Debug.Log("Client sends serverRpc spawn ally");
         AddToArmy(type, att, attSpe, h, l, localClientId);
@@ -36,13 +37,14 @@ public class ShadowArmyController : NetworkBehaviour
     public void SpawnAllyButtonServerRpc()
     {
         GameObject newAllyInfo = Instantiate(allyButton, allyInformation.transform.GetChild(0).GetChild(1).GetChild(0));
-        newAllyInfo.GetComponent<NetworkObject>().Spawn();
+        // undo comment for multiplayer
+        //newAllyInfo.GetComponent<NetworkObject>().Spawn();
     }
 
     [ClientRpc]
     public void ClientSpawnAllyClientRpc()
     {
-        
+        // undo comment for multiplayer
         // if (IsHost) { return; }
         GameObject[] ally = GameObject.FindGameObjectsWithTag("Ally");
 
@@ -61,7 +63,8 @@ public class ShadowArmyController : NetworkBehaviour
     [ServerRpc]
     public void ServerSummonArmyServerRpc()
     {
-        if(armySummoned.Value == false)
+        // uncomment for multiplayer
+        /*if(armySummoned.Value == false)
         {
             armySummoned.Value = true;
         }
@@ -69,21 +72,23 @@ public class ShadowArmyController : NetworkBehaviour
         {
             armySummoned.Value = false;
         }
-        
+        */
         //ClientSummonArmyClientRpc();
     }
 
     private void OnEnable()
     {
-        armySummoned.OnValueChanged += OnSummonArmy;
+        //uncomment for multiplayer
+        //armySummoned.OnValueChanged += OnSummonArmy;
     }
 
     private void OnDisable()
     {
-        armySummoned.OnValueChanged -= OnSummonArmy;
+        // uncomment for multiplayer
+       // armySummoned.OnValueChanged -= OnSummonArmy;
     }
 
-    private void OnSummonArmy(bool oldValue, bool newValue)
+    public void OnSummonArmy(bool oldValue, bool newValue)
     {
         /*if (!IsClient) { return; }
        
@@ -113,19 +118,25 @@ public class ShadowArmyController : NetworkBehaviour
         int k = 1;
         int c = 0;
 
-        if (!IsClient) { return; }
+        armySummoned = !armySummoned;
+
+        // undo comment for multiplayer
+        //if (!IsClient) { return; }
         for (int i = 3; i < gameObject.transform.childCount; i++)
         {
 
 
-            if (armySummoned.Value == false)
+            if (armySummoned == false)
             {
+                // uncomment for multiplayer
                 gameObject.transform.GetChild(i).transform.position = gameObject.transform.position;
-                gameObject.transform.GetChild(i).gameObject.SetActive(armySummoned.Value);
+                gameObject.transform.GetChild(i).gameObject.SetActive(armySummoned);
             }
             else
             {
-                gameObject.transform.GetChild(i).gameObject.SetActive(armySummoned.Value);
+                // uncomment for multiplayer
+               // gameObject.transform.GetChild(i).gameObject.SetActive(armySummoned.Value);
+                gameObject.transform.GetChild(i).gameObject.SetActive(!gameObject.transform.GetChild(i).gameObject.activeSelf);
                 // set positions around player
 
                 // increase circle spawn position outwards by 1 once circle completed
@@ -182,14 +193,15 @@ public class ShadowArmyController : NetworkBehaviour
     [ClientRpc]
     public void ClientSummonArmyClientRpc()
     {
-        if(!IsLocalPlayer) { return; }
+        // undo comment for multiplayer
+        //if(!IsLocalPlayer) { return; }
         for (int i = 3; i < gameObject.transform.childCount; i++)
         {
             
 
             
-
-                gameObject.transform.GetChild(i).gameObject.SetActive(armySummoned.Value);
+                // uncomment for multiplayer
+               // gameObject.transform.GetChild(i).gameObject.SetActive(armySummoned.Value);
 
                 //SummonArmy();
                 //ClientSummonArmyClientRpc();
@@ -204,11 +216,11 @@ public class ShadowArmyController : NetworkBehaviour
     // that client
     public void AddToArmy(char type, float att, float attSpe, float h, int l, ulong localClientId)
     {
-
-        if (!IsHost)
-        {
-            return;
-        }
+        // Uncomment for multiplayer
+      //  if (!IsHost)
+        //{
+          //  return;
+        //}
 
         newAlly = null;
         if (type == 'm')
@@ -229,35 +241,40 @@ public class ShadowArmyController : NetworkBehaviour
             newAlly = Instantiate(tank, transform.position, transform.rotation);
         }
 
-        newAlly.GetComponent<NetworkObject>().Spawn();
+        // uncomment for multiplayer
+       // newAlly.GetComponent<NetworkObject>().Spawn();
 
         if (newAlly != null)
         {
-            
-            if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(localClientId, out NetworkClient networkClient))
-            {
-                return;
-            }
+            //uncommnet for multiplayer
+            // if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(localClientId, out NetworkClient networkClient))
+            //{
+            //  return;
+            //}
 
-            localPlayer = networkClient.PlayerObject.gameObject;
+            localPlayer = GameObject.FindGameObjectWithTag("Player"); // networkClient.PlayerObject.gameObject; undo comment for multiplayer
 
             
-            newAlly.SetActive(false);
+            
             newAlly.GetComponent<AllyMeleeController>().player = localPlayer;
 
-            newAlly.transform.parent = gameObject.transform;
+            newAlly.transform.parent = shadowArmy.transform;
             newAlly.transform.position = new Vector3(0, 2, 0);
             newAlly.GetComponent<AllyController>().attack.Value = att;
             newAlly.GetComponent<AllyController>().attackSpeed.Value = attSpe;
             newAlly.GetComponent<AllyController>().setMaxHealth(h);
             newAlly.GetComponent<AllyController>().setHealth(h);
-            for(int i = 0; i < l-1; i++)
+            newAlly.GetComponent<AllyController>().allyName = "BEAK Gamer " + Random.Range(1, 1000).ToString();
+            newAlly.GetComponent<AllyController>().allyAggro = GetComponent<PlayerMovementControler>().armyAggro;
+            for (int i = 0; i < l-1; i++)
             {
                 newAlly.GetComponent<AllyController>().levelUp();
             }
+            newAlly.SetActive(false);
         }
         newAllyInfo = Instantiate(allyButton, allyInformation.transform.GetChild(0).GetChild(1).GetChild(0));
-        newAllyInfo.GetComponent<NetworkObject>().Spawn();
+        // undo comment for multiplayer
+        //newAllyInfo.GetComponent<NetworkObject>().Spawn();
         AllyButtonClientRpc();
         //newAllyInfo.GetComponent<AllyButtonScript>().FindStatsPanel();
         newAllyInfo.GetComponent<AllyButtonScript>().ally = newAlly;
@@ -291,11 +308,12 @@ public class ShadowArmyController : NetworkBehaviour
         {
             if (shadowArmy.transform.childCount > 0)
             {
-                ulong localPlayerId = NetworkManager.Singleton.LocalClientId;
-                if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(localPlayerId, out NetworkClient networkClient))
-                {
-                    return;
-                }
+                // undo comment for multiplayer
+                //ulong localPlayerId = NetworkManager.Singleton.LocalClientId;
+                //if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(localPlayerId, out NetworkClient networkClient))
+                //{
+                  //  return;
+                //}
 
 
                 //&& shadowArmy.transform.GetChild(0).gameObject.GetComponent<AllyMeleeController>().player == transform.gameObject
@@ -309,9 +327,11 @@ public class ShadowArmyController : NetworkBehaviour
                     for (int i = 0; i < shadowArmy.transform.childCount; i++)
                     {
                         // activate ally from army
-                        if (shadowArmy.transform.GetChild(i).gameObject.GetComponent<AllyMeleeController>().player == networkClient.PlayerObject.gameObject)
+                        // undo comment for multiplayer
+                        //if (shadowArmy.transform.GetChild(i).gameObject.GetComponent<AllyMeleeController>().player == networkClient.PlayerObject.gameObject)
+                        if (shadowArmy.transform.GetChild(i).gameObject.GetComponent<AllyMeleeController>().player == this.gameObject)
                         {
-                            shadowArmy.transform.GetChild(i).gameObject.SetActive(armySummoned.Value);
+                            shadowArmy.transform.GetChild(i).gameObject.SetActive(true);
 
 
                             // set positions around player
@@ -361,16 +381,33 @@ public class ShadowArmyController : NetworkBehaviour
                 {
                     for (int i = 0; i < shadowArmy.transform.childCount; i++)
                     {
-                        if (shadowArmy.transform.GetChild(i).gameObject.GetComponent<AllyMeleeController>().player == networkClient.PlayerObject.gameObject)
+                        // undo comment for multiplayer
+                        //if (shadowArmy.transform.GetChild(i).gameObject.GetComponent<AllyMeleeController>().player == networkClient.PlayerObject.gameObject)
+                        if (shadowArmy.transform.GetChild(i).gameObject.GetComponent<AllyMeleeController>().player == this.gameObject)
                         {
                             // reset army positions
                             shadowArmy.transform.GetChild(i).transform.position = shadowArmy.transform.position;
                             // de-activate ally from army
-                            shadowArmy.transform.GetChild(i).gameObject.SetActive(armySummoned.Value);
+                            shadowArmy.transform.GetChild(i).gameObject.SetActive(false);
                         }
                     }
                 }
             }
+        }
+    }
+
+    public void SetAggroStatus(AggroEnum _allyAggro)
+    {
+        for (int i = 0; i < shadowArmy.transform.childCount; i++)
+        {
+            // undo comment for multiplayer
+            //if (shadowArmy.transform.GetChild(i).gameObject.GetComponent<AllyMeleeController>().player == networkClient.PlayerObject.gameObject)
+            //if (shadowArmy.transform.GetChild(i).gameObject.GetComponent<AllyMeleeController>().player == this.gameObject)
+            //{
+                
+            // change ally aggro
+            shadowArmy.transform.GetChild(i).GetComponent<AllyController>().allyAggro = _allyAggro;
+            //}
         }
     }
 }

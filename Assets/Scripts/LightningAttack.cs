@@ -50,7 +50,7 @@ public class LightningAttack : MonoBehaviour
         }
         */
 
-        if(Input.GetKeyDown(KeyCode.Alpha1) && transform.GetComponent<PlayerMovement>().enemy != null)
+        if(Input.GetKeyDown(KeyCode.Alpha1) && transform.GetComponent<PlayerMovementControler>().enemy != null)
         {
             
             LightningActivate();
@@ -81,7 +81,7 @@ public class LightningAttack : MonoBehaviour
                 {
                     if(enem != null)
                     {
-                        enem.GetComponent<EnemyController>().TakeDamage(3);
+                        enem.GetComponent<EnemyController>().TakeDamage(3, this.gameObject);
                     }
                 }
                 //Destroy line compoment
@@ -121,9 +121,9 @@ public class LightningAttack : MonoBehaviour
 
     public void LightningActivate()
     {
-        if (lightning == null && transform.GetComponent<PlayerMovement>().enemy != null)
+        if (lightning == null && transform.GetComponent<PlayerMovementControler>().enemy != null)
         {
-            enemy = transform.GetComponent<PlayerMovement>().enemy;
+            enemy = transform.GetComponent<PlayerMovementControler>().enemy;
             totalEnemies.Add(enemy);
             CheckDistance(enemy);
             lightning = gameObject.AddComponent<LineRenderer>();

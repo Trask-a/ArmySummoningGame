@@ -20,21 +20,22 @@ public class Soul : NetworkBehaviour
 
     private void Start()
     {
-        findPlayer();
+        //findPlayer();
         
     }
 
     private void OnMouseDown()
     {
+        findPlayer();
         // If player level is greater than or equal to enemy level then capture chance is 100%
         // else the chance is 1 divided by the difference in levels + 1
-        if (player.GetComponent<PlayerMovement>().level >= level.Value)
+        if (player.GetComponent<PlayerMovementControler>().level >= level.Value)
         {
             chanceToClaim = 1;
         }
         else
         {
-            chanceToClaim = (1f / (float)(Mathf.Abs(level.Value - player.GetComponent<PlayerMovement>().level) + 1f)) + 0.25f;
+            chanceToClaim = (1f / (float)(Mathf.Abs(level.Value - player.GetComponent<PlayerMovementControler>().level) + 1f)) + 0.25f;
         }
         
         soulPanel.SetActive(true);
@@ -63,7 +64,9 @@ public class Soul : NetworkBehaviour
         if (rand <= chanceToClaim)
         {
             // successful claim
-            player.GetComponent<ShadowArmyController>().ServerSpawnAllyServerRpc(type.Value, attack.Value, attackSpeed.Value, health.Value, level.Value, NetworkManager.Singleton.LocalClientId);
+            // undo comment for multiplayer
+            //player.GetComponent<ShadowArmyController>().ServerSpawnAllyServerRpc(type.Value, attack.Value, attackSpeed.Value, health.Value, level.Value, NetworkManager.Singleton.LocalClientId);
+            player.GetComponent<ShadowArmyController>().AddToArmy(type.Value, attack.Value, attackSpeed.Value, health.Value, level.Value, 0);
             //player.GetComponent<ShadowArmyController>().SpawnAllyButtonServerRpc();
             soulPanel.SetActive(false);
             Destroy(GetComponent<SphereCollider>());
@@ -115,11 +118,27 @@ public class Soul : NetworkBehaviour
             yield return new WaitForSeconds(0.1f);
             disAmount += 0.1f;
         }
-        DeathServerRpc();
+        //undo comment for multiplayer and remove line below it
+        //DeathServerRpc();
+        Destroy(gameObject);
     }
 
     public void findPlayer()
     {
+        player = GameObject.FindGameObjectWithTag("Player"); 
+        // Uncomment for mupltiplayer and comment out above line
+        /*
+        GameObject [] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach(GameObject p in players)
+        {
+            if(p.GetComponent<NetworkObject>().IsLocalPlayer)
+            {
+                player = p;
+            }
+        }
+        */
+
+        /*
         ulong localClientId = 0;
         localClientId = NetworkManager.Singleton.LocalClientId;
             
@@ -140,6 +159,7 @@ public class Soul : NetworkBehaviour
 
                 }
             }
+        */
         
     }
-    }
+}

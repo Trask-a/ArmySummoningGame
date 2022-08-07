@@ -12,6 +12,7 @@ TagManager:
   - AllyPanel
   - StatsPanel
   - Spawner
+  - Stats
   layers:
   - Default
   - TransparentFX

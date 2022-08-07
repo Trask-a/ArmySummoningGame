@@ -11,11 +11,13 @@ public class LightningBranch : MonoBehaviour
     float lightningRadius = 40f;
     GameObject entityInRange;
     public GameObject damageNumber;
+    public GameObject player;
 
     // Start is called before the first frame update
     void Start()
     {
         entities = GameObject.FindGameObjectsWithTag("enemy");
+        player = GameObject.FindGameObjectWithTag("Player");
         CheckDistance();
         Destroy(gameObject, 0.75f);
     }
@@ -48,7 +50,7 @@ public class LightningBranch : MonoBehaviour
                 {
                     entityInRange = entities[i];
                     entities[i].GetComponent<EnemyController>().SetVBL(true);
-                    entities[i].GetComponent<EnemyController>().TakeDamage(3);
+                    entities[i].GetComponent<EnemyController>().TakeDamage(3, player);
                     GameObject dn = Instantiate(damageNumber, entities[i].transform.position, new Quaternion(45, 45, 0, 1));
                     dn.GetComponent<DamagePopup>().Setup(3);
                     return;

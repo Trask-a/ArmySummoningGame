@@ -46,7 +46,7 @@ public class AllyHealerController : MonoBehaviour
         }
         else
         {
-            if (player.GetComponent<PlayerMovement>().healPlayer == true)
+            if (player.GetComponent<PlayerMovementControler>().healPlayer == true)
             {
                 enemy = player;
             }
@@ -90,7 +90,7 @@ public class AllyHealerController : MonoBehaviour
                         {
                             FacePlayer();
                         }
-                        if (player.GetComponent<PlayerMovement>().healPlayer == true)
+                        if (player.GetComponent<PlayerMovementControler>().healPlayer == true)
                         {
                             HealPlayer(GetComponent<AllyController>().attack.Value);
                             //if(player.GetComponent<PlayerMovement>().health >= player.GetComponent<PlayerMovement>().maxHealth)
@@ -153,9 +153,9 @@ public class AllyHealerController : MonoBehaviour
         // Check if attack cooldown is 0
         if (attackCooldown <= 0f)
         {
-            player.GetComponent<PlayerMovement>().Heal(h);
-            player.GetComponent<PlayerMovement>().healPlayer = false;
-            player.GetComponent<PlayerMovement>().healPlayerButton.GetComponent<Image>().color = Color.white;
+            player.GetComponent<PlayerMovementControler>().Heal(h);
+            player.GetComponent<PlayerMovementControler>().healPlayer = false;
+            player.GetComponent<PlayerMovementControler>().healPlayerButton.GetComponent<Image>().color = Color.white;
             GameObject dn = Instantiate(damageNumber, player.transform.position, new Quaternion(45, 45, 0, 1));
             dn.GetComponent<DamagePopup>().Setup((int)h);
             GetComponent<AllyController>().AddExperience(1);
